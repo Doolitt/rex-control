@@ -1,0 +1,21 @@
+# Secrets
+.env
+*.env
+*.key
+*.pem
+*.log
+
+# OpenClaw runtime state
+.openclaw/agents/
+.openclaw/restart-sentinel.json
+.openclaw/*.log
+
+# Python
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+
+# OS
+.DS_Store

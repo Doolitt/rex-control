@@ -1,0 +1,179 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.2.12",
+    "lastTouchedAt": "2026-02-18T06:21:26.743Z"
+  },
+  "env": {
+    "OPENROUTER_API_KEY": "REDACTED",
+    "MATON_API_KEY": "REDACTED",
+    "GITHUB_TOKEN": "REDACTED"
+  },
+  "wizard": {
+    "lastRunAt": "2026-02-18T06:21:26.734Z",
+    "lastRunVersion": "2026.2.12",
+    "lastRunCommand": "doctor",
+    "lastRunMode": "local"
+  },
+  "auth": {
+    "profiles": {
+      "anthropic:default": {
+        "provider": "anthropic",
+        "mode": "REDACTED"
+      },
+      "openrouter:default": {
+        "provider": "openrouter",
+        "mode": "REDACTED"
+      },
+      "openai:default": {
+        "provider": "openai",
+        "mode": "REDACTED"
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "claude-sonnet-4-6",
+        "fallbacks": [
+          "deepseek/deepseek-v3.2",
+          "google/gemini-2.5-flash-lite",
+          "xiaomi/mimo-v2-flash"
+        ]
+      },
+      "workspace": "/root/.openclaw/workspace",
+      "contextTokens": 128000,
+      "compaction": {
+        "mode": "safeguard"
+      },
+      "heartbeat": {
+        "every": "30m",
+        "model": "openrouter/xiaomi/mimo-v2-flash",
+        "target": "last"
+      },
+      "maxConcurrent": 4,
+      "subagents": {
+        "maxConcurrent": 8,
+        "archiveAfterMinutes": 60,
+        "model": "openrouter/google/gemini-2.5-flash-lite"
+      }
+    },
+    "list": [
+      {
+        "id": "main",
+        "model": {
+          "primary": "claude-sonnet-4-6"
+        }
+      },
+      {
+        "id": "chronos",
+        "model": {
+          "primary": "google/gemini-3-flash-preview"
+        }
+      }
+    ]
+  },
+  "bindings": [
+    {
+      "agentId": "main",
+      "match": {
+        "channel": "discord",
+        "peer": {
+          "kind": "channel",
+          "id": "1471313773930348699"
+        }
+      }
+    },
+    {
+      "agentId": "chronos",
+      "match": {
+        "channel": "discord",
+        "peer": {
+          "kind": "channel",
+          "id": "1471374439064014870"
+        }
+      }
+    }
+  ],
+  "messages": {
+    "ackReactionScope": "group-mentions"
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto"
+  },
+  "hooks": {
+    "internal": {
+      "enabled": true,
+      "entries": {
+        "boot-md": {
+          "enabled": true
+        },
+        "command-logger": {
+          "enabled": true
+        },
+        "session-memory": {
+          "enabled": true
+        }
+      }
+    }
+  },
+  "channels": {
+    "discord": {
+      "enabled": true,
+      "token": "REDACTED",
+      "groupPolicy": "allowlist",
+      "guilds": {
+        "general-chat": {},
+        "977381569532674078": {}
+      }
+    }
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "loopback",
+    "auth": {
+      "mode": "token",
+      "token": "REDACTED"
+    },
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    }
+  },
+  "skills": {
+    "install": {
+      "nodeManager": "npm"
+    },
+    "entries": {
+      "brainstorming-studio": {
+        "enabled": true
+      },
+      "agent-council": {
+        "enabled": true
+      },
+      "clawtoclaw": {
+        "enabled": true
+      },
+      "outlook": {
+        "enabled": true
+      },
+      "perry-coding-agents": {
+        "enabled": true
+      },
+      "brainstorming": {
+        "enabled": true
+      },
+      "gmail": {
+        "enabled": true
+      }
+    }
+  },
+  "plugins": {
+    "entries": {
+      "discord": {
+        "enabled": true
+      }
+    }
+  }
+}
