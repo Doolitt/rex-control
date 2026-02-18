@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "providers": {
+    "anthropic": {
+      "label": "Anthropic (Direct API)",
+      "idPrefix": "anthropic/",
+      "models": {
+        "anthropic/claude-sonnet-4-6": {
+          "label": "Claude Sonnet 4.6",
+          "enabled": true
+        },
+        "anthropic/claude-opus-4": {
+          "label": "Claude Opus 4",
+          "enabled": true
+        }
+      }
+    },
+    "openrouter": {
+      "label": "OpenRouter",
+      "idPrefix": "openrouter/",
+      "models": {
+        "openrouter/anthropic/claude-sonnet-4.6": {
+          "label": "Claude Sonnet 4.6 (OpenRouter)",
+          "enabled": true
+        },
+        "openrouter/anthropic/claude-opus-4.6": {
+          "label": "Claude Opus 4.6 (OpenRouter)",
+          "enabled": true
+        },
+        "openrouter/deepseek/deepseek-v3.2": {
+          "label": "DeepSeek v3.2 (OpenRouter)",
+          "enabled": true
+        }
+      }
+    },
+    "deepseek": {
+      "label": "DeepSeek (Direct)",
+      "idPrefix": "deepseek/",
+      "models": {
+        "deepseek/deepseek-v3.2": {
+          "label": "DeepSeek v3.2",
+          "enabled": true
+        }
+      }
+    },
+    "google": {
+      "label": "Google",
+      "idPrefix": "google/",
+      "models": {
+        "google/gemini-2.5-flash-lite": {
+          "label": "Gemini 2.5 Flash Lite",
+          "enabled": true
+        }
+      }
+    },
+    "xiaomi": {
+      "label": "Xiaomi",
+      "idPrefix": "xiaomi/",
+      "models": {
+        "xiaomi/mimo-v2-flash": {
+          "label": "Mimo v2 Flash",
+          "enabled": true
+        }
+      }
+    }
+  },
+  "aliases": {
+    "sonnet": [
+      "anthropic/claude-sonnet-4-6",
+      "openrouter/anthropic/claude-sonnet-4.6"
+    ],
+    "opus": [
+      "anthropic/claude-opus-4",
+      "openrouter/anthropic/claude-opus-4.6"
+    ],
+    "deepseek": [
+      "deepseek/deepseek-v3.2",
+      "openrouter/deepseek/deepseek-v3.2"
+    ],
+    "flash": [
+      "google/gemini-2.5-flash-lite"
+    ]
+  }
+}
