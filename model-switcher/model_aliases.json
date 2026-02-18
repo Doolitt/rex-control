@@ -1,30 +1,5 @@
 {
-  "sonnet":                    "anthropic/claude-sonnet-4.6",
-  "opus":                      "anthropic/claude-opus-4.6",
-  "deepseek":                  "deepseek/deepseek-v3.2",
-
-  "claude-sonnet-4-6":         "anthropic/claude-sonnet-4.6",
-  "claude-sonnet-4.6":         "anthropic/claude-sonnet-4.6",
-  "anthropic/claude-sonnet-4-6": "anthropic/claude-sonnet-4.6",
-
-  "claude-sonnet-4-5":         "anthropic/claude-sonnet-4.5",
-  "claude-sonnet-4.5":         "anthropic/claude-sonnet-4.5",
-  "anthropic/claude-sonnet-4-5": "anthropic/claude-sonnet-4.5",
-
-  "claude-opus-4-6":           "anthropic/claude-opus-4.6",
-  "claude-opus-4.6":           "anthropic/claude-opus-4.6",
-  "anthropic/claude-opus-4-6": "anthropic/claude-opus-4.6",
-
-  "claude-opus-4-5":           "anthropic/claude-opus-4.5",
-  "claude-opus-4.5":           "anthropic/claude-opus-4.5",
-  "anthropic/claude-opus-4-5": "anthropic/claude-opus-4.5",
-
-  "claude-opus-4":             "anthropic/claude-opus-4",
-  "anthropic/claude-opus-4":   "anthropic/claude-opus-4",
-
-  "claude-sonnet-4":           "anthropic/claude-sonnet-4",
-  "anthropic/claude-sonnet-4": "anthropic/claude-sonnet-4",
-
-  "gemini-flash":              "google/gemini-2.5-flash-lite",
-  "flash":                     "google/gemini-2.5-flash-lite"
+  "sonnet": "anthropic/claude-sonnet-4.6",
+  "opus": "anthropic/claude-opus-4.6",
+  "deepseek": "deepseek/deepseek-v3.2"
 }

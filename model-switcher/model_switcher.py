@@ -34,38 +34,12 @@ def load_aliases() -> dict:
 
 
 def normalize(token: str) -> str:
-    """
-    Normalize a model token to a valid OpenRouter model ID.
-
-    Steps:
-      1. Strip accidental openrouter/ prefix
-      2. Alias lookup (exact match)
-      3. Version-dash normalization: convert digit-dash-digit → digit.digit
-         e.g. anthropic/claude-sonnet-4-6 → anthropic/claude-sonnet-4.6
-      4. Alias lookup again on normalized form
-    """
-    import re
+    """Strip accidental openrouter/ prefix, then resolve alias."""
     t = token.strip()
-
-    # 1. Strip openrouter/ prefix
     if t.lower().startswith("openrouter/"):
         t = t[len("openrouter/"):]
-
     aliases = load_aliases()
-
-    # 2. Exact alias match
-    if t in aliases:
-        return aliases[t]
-
-    # 3. Normalize digit-dash-digit version suffixes (e.g. 4-6 → 4.6)
-    t_dot = re.sub(r'(\d)-(\d)', r'\1.\2', t)
-
-    # 4. Alias match on dot-normalized form
-    if t_dot in aliases:
-        return aliases[t_dot]
-
-    # Return dot-normalized form (works for e.g. anthropic/claude-sonnet-4-6)
-    return t_dot
+    return aliases.get(t, t)
 
 
 def openrouter_has_model(model_id: str) -> bool:
