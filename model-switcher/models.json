@@ -1,0 +1,38 @@
+{
+  "providers": {
+    "anthropic": {
+      "label": "Anthropic (direct)",
+      "models": [
+        {
+          "id": "anthropic/claude-sonnet-4-6",
+          "aliases": ["sonnet", "sonnet-4-6"]
+        },
+        {
+          "id": "anthropic/claude-opus-4-6",
+          "aliases": ["opus", "opus-4-6"]
+        },
+        {
+          "id": "anthropic/claude-haiku-4-5",
+          "aliases": ["haiku", "haiku-4-5"]
+        }
+      ]
+    },
+    "openrouter": {
+      "label": "OpenRouter",
+      "models": [
+        {
+          "id": "openrouter/anthropic/claude-sonnet-4.6",
+          "aliases": ["or-sonnet", "openrouter-sonnet"]
+        },
+        {
+          "id": "openrouter/deepseek/deepseek-v3.2",
+          "aliases": ["deepseek", "ds", "v3.2"]
+        },
+        {
+          "id": "openrouter/openai/gpt-4.1",
+          "aliases": ["or-gpt41", "gpt41"]
+        }
+      ]
+    }
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "sonnet": "anthropic/claude-sonnet-4.6",
-  "opus": "anthropic/claude-opus-4.6",
-  "deepseek": "deepseek/deepseek-v3.2"
+  "sonnet": "anthropic/claude-sonnet-4-6",
+  "opus": "anthropic/claude-opus-4-6",
+  "deepseek": "openrouter/deepseek/deepseek-v3.2"
 }

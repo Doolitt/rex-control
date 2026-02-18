@@ -1,15 +1,14 @@
 ---
 name: model-switcher
 description: >
-  Switch, validate, and inspect the active AI model for the OpenClaw gateway via Discord commands.
-  Trigger when a user sends: `!model current`, `!model validate <model>`, or `!model set <model>`.
-  Also triggers on variations like "what model are you running", "switch model to X", "change model".
-  Handles OpenRouter model IDs and short aliases (sonnet, opus, deepseek).
+  Provider-aware model switching for OpenClaw via Discord slash command handlers.
+  Use for `/models` or `/model` style UX (or fallback aliases `/modelsx` + `/modelx`),
+  including local model browsing, alias resolution, safe switching, and rollback.
 ---
 
 # model-switcher
 
-Handles `!model` Discord commands by calling `model_switcher.py`.
+Handles model browsing and switching with **local registry-first** behavior (no listing API calls).
 
 ## Script location
 
@@ -17,87 +16,60 @@ Handles `!model` Discord commands by calling `model_switcher.py`.
 /root/.openclaw/workspace/skills/model-switcher/model_switcher.py
 ```
 
-## Aliases (model_aliases.json)
+## Registry files
 
-| Alias     | Resolves to                        |
-|-----------|------------------------------------|
-| sonnet    | anthropic/claude-sonnet-4.6        |
-| opus      | anthropic/claude-opus-4.6          |
-| deepseek  | deepseek/deepseek-v3.2             |
+- `models.json` — provider + model catalog used for listing and local validation.
+- `model_aliases.json` — optional compatibility aliases merged into registry aliases.
 
-`openrouter/<id>` prefixes are automatically stripped before validation.
+## Recommended slash-command mapping
 
-## Commands
+If `/model` and `/models` are already owned by OpenClaw core, map this skill to `/modelx` and `/modelsx` with the same args.
 
-### `!model current`
+- `/models` → `python3 .../model_switcher.py models [provider] [--page N] [--page-size N]`
+- `/model` → `python3 .../model_switcher.py model`
+- `/model set <modelOrAlias>` → `python3 .../model_switcher.py model set <modelOrAlias> --user-id <discordUserId>`
+- `/model reset` → `python3 .../model_switcher.py model reset --user-id <discordUserId>`
+- `/model add <provider> <id> [aliases...]` → `python3 .../model_switcher.py model add ... --user-id <discordUserId>`
+- `/model remove <provider> <id>` → `python3 .../model_switcher.py model remove ... --user-id <discordUserId>`
+- `/model export` → `python3 .../model_switcher.py model export --user-id <discordUserId>`
+- `/model reload` → `python3 .../model_switcher.py model reload --user-id <discordUserId>`
 
-Print the model currently configured for the main agent.
+Mutating commands require `--user-id` that exists in `channels.discord.allowFrom`.
 
-```bash
-python3 /root/.openclaw/workspace/skills/model-switcher/model_switcher.py current
-```
+## Validation modes
 
-Format response as:
-```
-🤖 Current model: <model_id>
-```
+Pass `--validate-mode` when needed:
 
----
+- `local` (default): local registry only (cheap; no API calls)
+- `remote`: local + provider-aware remote check (`openrouter/*` checks OpenRouter catalog)
+- `none`: skip validation
 
-### `!model validate <modelOrAlias>`
+## Safe switching behavior
 
-Check whether a model exists in the OpenRouter catalog.
+`model set` and `model reset`:
 
-```bash
-python3 /root/.openclaw/workspace/skills/model-switcher/model_switcher.py validate <modelOrAlias>
-```
+1. Resolve alias to canonical provider-qualified model id.
+2. Validate (default local only).
+3. Backup `/root/.openclaw/openclaw.json` to `/root/.openclaw/backups/openclaw.json.<ts>.bak`.
+4. Patch:
+   - `agents.defaults.model.primary`
+   - `agents.list[id=main].model.primary`
+5. Restart `openclaw-gateway` (`systemctl --user restart openclaw-gateway`).
+6. Health-check:
+   - systemd active status
+   - logs contain `agent model: <expected>`
+   - fail fast on `Unknown model` / `model not found`
+7. Roll back to backup and restart if health-check fails.
 
-Relay the script's output verbatim (it already includes ✅/❌ emoji).
+## Quick run instructions
 
----
-
-### `!model set <modelOrAlias>`
-
-Switch the active model. This:
-1. Validates the model on OpenRouter
-2. Backs up `/root/.openclaw/openclaw.json`
-3. Patches `agents.defaults.model.primary` and `agents.list[id=main].model.primary`
-4. Restarts `openclaw-gateway` via systemctl
-5. Verifies logs contain `agent model: <model_id>`
-6. Rolls back on failure
-
-```bash
-python3 /root/.openclaw/workspace/skills/model-switcher/model_switcher.py set <modelOrAlias>
-```
-
-This takes ~10–25 seconds. Let the user know it's in progress before calling. Relay the full output.
-
-⚠️ After a successful `set`, the gateway restarts and your session reconnects — the switch affects all future messages.
-
----
-
-### `!model help`
-
-Reply with this reference without calling the script:
-
-```
-🤖 Model Switcher Commands:
-• !model current — show active model
-• !model validate <model> — check if model exists on OpenRouter
-• !model set <model> — switch model (restarts gateway)
-
-Aliases: sonnet · opus · deepseek
-Examples:
-  !model set sonnet
-  !model set deepseek/deepseek-v3.2
-  !model validate anthropic/claude-opus-4.6
-```
-
----
-
-## Output formatting for Discord
-
-- Use emoji prefixes (✅ ❌ 🔄 💾 🎉) as the script provides them
-- Wrap multi-line output in a code block if >3 lines
-- For `set`, send a "working on it" message first, then the result when done
-- Never expose the raw backup file path unless specifically asked
+1. Restart gateway after skill updates:
+   ```bash
+   systemctl --user restart openclaw-gateway
+   ```
+2. Sanity checks:
+   ```bash
+   python3 /root/.openclaw/workspace/skills/model-switcher/model_switcher.py models
+   python3 /root/.openclaw/workspace/skills/model-switcher/model_switcher.py model
+   python3 /root/.openclaw/workspace/skills/model-switcher/model_switcher.py model set deepseek --dry-run --user-id 790975088227778581
+   ```
